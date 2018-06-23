@@ -1,0 +1,22 @@
+"*":
+  "build-cmake":
+    buildDirectory: "$PROJECT_DIR/build"
+  core:
+    autoHideMenuBar: true
+    telemetryConsent: "no"
+  editor:
+    fontSize: 16
+    showInvisibles: true
+    tabLength: 4
+  "exception-reporting":
+    userId: "cdeb6f04-3aa3-4689-8b31-a14b67c6e2fa"
+  "ide-clangd": {}
+  "project-plus":
+    projectHome: "/mnt/bender"
+  "tree-view": {}
+  welcome:
+    showOnStartup: false
+".blade.html.php.text":
+  editor:
+    commentEnd: " --}}"
+    commentStart: "{{-- "

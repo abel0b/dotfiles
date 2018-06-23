@@ -1,0 +1,3 @@
+'.platform-win32, .platform-linux':
+  'alt': 'abort!'
+  'alt-f1': 'window:toggle-menu-bar'
