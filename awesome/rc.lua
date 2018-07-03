@@ -41,7 +41,7 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init(gears.filesystem.get_themes_dir() .. "zenburn/theme.lua")
+beautiful.init("~/.config/awesome/theme/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "urxvt"
@@ -485,8 +485,12 @@ awful.rules.rules = {
     },
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
-    -- { rule = { class = "Firefox" },
-    --   properties = { screen = 1, tag = "2" } },
+     { rule = { class = "Firefox" },
+       properties = { screen = 1, tag = "web" } },
+     { rule = { class = "Atom" },
+     	properties = { screen = 1, tag = "code"}},
+     { rule = { class = "URxvt" },
+       properties = { screen = 1, tag = "term" }}
 }
 -- }}}
 
