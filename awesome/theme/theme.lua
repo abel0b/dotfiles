@@ -16,15 +16,15 @@ theme.tasklist_disable_icon = true
 
 
 -- {{{ Styles
-theme.font      = "Consolas 8"
+theme.font      = "Cantarell 8"
 
 -- {{{ Colors
 theme.fg_normal  = "#DCDCCC"
-theme.fg_focus   = "#F0DFAF"
+theme.fg_focus   = "#FFFFFF"
 theme.fg_urgent  = "#CC9393"
-theme.bg_normal  = "#3F3F3F"
-theme.bg_focus   = "#1E2320"
-theme.bg_urgent  = "#3F3F3F"
+theme.bg_normal  = "#212121"
+theme.bg_focus   = "#5599FF"
+theme.bg_urgent  = "#212121"
 theme.bg_systray = theme.bg_normal
 -- }}}
 
@@ -32,7 +32,7 @@ theme.bg_systray = theme.bg_normal
 theme.useless_gap   = dpi(0)
 theme.border_width  = dpi(2)
 theme.border_normal = "#3F3F3F"
-theme.border_focus  = "#31406d"
+theme.border_focus  = "#d12727"
 theme.border_marked = "#CC9393"
 -- }}}
 
@@ -75,6 +75,8 @@ theme.mouse_finder_color = "#CC9393"
 -- menu_[border_color|border_width]
 theme.menu_height = dpi(15)
 theme.menu_width  = dpi(100)
+theme.menu_bg_normal = "#3F3F3F"
+theme.menu_bg_focues = "#FF0000"
 -- theme.taglist_spacing = dpi(3)1
 -- }}}
 
@@ -84,6 +86,10 @@ theme.menu_width  = dpi(100)
 -- theme.taglist_squares_unsel = themes_path .. "theme/taglist/squarez.png"
 --theme.taglist_squares_resize = "false"
 -- }}}
+
+
+theme.taglist_bg_focus = "#d12727"
+theme.taglist_fg_focus = "#FFFFFF"
 
 -- {{{ Misc
 theme.awesome_icon           = themes_path .. "theme/awesome-icon.png"
@@ -137,6 +143,7 @@ theme.titlebar_maximized_button_focus_inactive  = themes_path .. "theme/titlebar
 theme.titlebar_maximized_button_normal_inactive = themes_path .. "theme/titlebar/maximized_normal_inactive.png"
 -- }}}
 -- }}}
+
 
 return theme
 

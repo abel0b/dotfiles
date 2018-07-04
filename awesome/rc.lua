@@ -14,6 +14,7 @@ local hotkeys_popup = require("awful.hotkeys_popup").widget
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -183,7 +184,7 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ "web", "term", "code", "docs", "media", "chat" }, s, awful.layout.layouts[1])
+    awful.tag({ "Web", "Terminal", "Code", "Document", "Media", "Chat" }, s, awful.layout.suit.tile)
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -448,6 +449,7 @@ awful.rules.rules = {
                      raise = true,
                      keys = clientkeys,
                      buttons = clientbuttons,
+                     size_hints_honor = false,
                      screen = awful.screen.preferred,
                      placement = awful.placement.no_overlap+awful.placement.no_offscreen
      }
@@ -486,11 +488,11 @@ awful.rules.rules = {
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
      { rule = { class = "Firefox" },
-       properties = { screen = 1, tag = "web" } },
+       properties = { screen = 1, tag = "Web" } },
      { rule = { class = "Atom" },
-     	properties = { screen = 1, tag = "code"}},
+     	properties = { screen = 1, tag = "Code"}},
      { rule = { class = "URxvt" },
-       properties = { screen = 1, tag = "term" }}
+       properties = { screen = 1, tag = "Terminal" }}
 }
 -- }}}
 
