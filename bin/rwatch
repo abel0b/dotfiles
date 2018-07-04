@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+while inotifywait -r -e create -e delete -e modify $1; do bash -c "$2"; done
