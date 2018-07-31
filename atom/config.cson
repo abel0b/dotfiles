@@ -3,10 +3,15 @@
     buildDirectory: "$PROJECT_DIR/build"
   core:
     autoHideMenuBar: true
+    disabledPackages: [
+      "ide-cpp"
+      "language-javascript"
+      "ide-vue"
+      "ide-clangd"
+    ]
     telemetryConsent: "no"
   editor:
-    fontSize: 16
-    showInvisibles: true
+    fontSize: 18
     tabLength: 4
   "exception-reporting":
     userId: "cdeb6f04-3aa3-4689-8b31-a14b67c6e2fa"
@@ -20,3 +25,6 @@
   editor:
     commentEnd: " --}}"
     commentStart: "{{-- "
+".html.text.vue":
+  editor:
+    softWrap: true

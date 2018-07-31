@@ -10,10 +10,15 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
+local battery_widget = require("awesome-wm-widgets.battery-widget.battery")
+local volume_widget = require("awesome-wm-widgets.volumebar-widget.volumebar")
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 
+require("awful.remote")
+
+local xrandr = require("xrandr")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -184,7 +189,7 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ "Web", "Terminal", "Code", "Document", "Media", "Chat" }, s, awful.layout.suit.tile)
+    awful.tag({ "web", "term", "dev", "com", "data", "git", "etc" }, s, awful.layout.suit.tile)
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -217,9 +222,11 @@ awful.screen.connect_for_each_screen(function(s)
         s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            mykeyboardlayout,
+            --mykeyboardlayout,
             wibox.widget.systray(),
-            mytextclock,
+            volume_widget,
+	    battery_widget,
+	    mytextclock,
             s.mylayoutbox,
         },
     }
@@ -332,7 +339,8 @@ globalkeys = gears.table.join(
               {description = "lua execute prompt", group = "awesome"}),
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end,
-              {description = "show the menubar", group = "launcher"})
+              {description = "show the menubar", group = "launcher"}),
+	awful.key({ modkey }, "t", function() xrandr.xrandr() end)
 )
 
 clientkeys = gears.table.join(
@@ -488,11 +496,17 @@ awful.rules.rules = {
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
      { rule = { class = "Firefox" },
-       properties = { screen = 1, tag = "Web" } },
+       properties = { screen = 1, tag = "web" } },
      { rule = { class = "Atom" },
-     	properties = { screen = 1, tag = "Code"}},
+     	properties = { screen = 1, tag = "dev"}},
      { rule = { class = "URxvt" },
-       properties = { screen = 1, tag = "Terminal" }}
+     properties = { screen = 1, tag = "term" }},
+     { rule = { class = "Slack" },
+     properties = {screen = 1, tag = "com"}},
+     { rule = { class = "DBeaver" },
+     	properties = { screen = 1, tag = "data" }},
+     { rule = { class = "Gitg" },
+     	properties = { screen = 1, tag = "git" }}
 }
 -- }}}
 

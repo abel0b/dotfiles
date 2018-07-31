@@ -11,7 +11,10 @@ fi
 if [ -z $1 ]; then
 	for dir in *; do
 		if [ -d $dir ]; then
-			configure $dir
+			if [ "$dir" != "bin" ]; then
+				configure $dir
+		
+			fi
 		fi
 	done
 else
