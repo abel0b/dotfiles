@@ -8,7 +8,7 @@ local dpi = require("beautiful.xresources").apply_dpi
 
 -- {{{ Main
 local theme = {}
-theme.wallpaper = themes_path .. "theme/landscape.png"
+theme.wallpaper = themes_path .. "theme/arch.png"
 -- }}}
 
 
@@ -16,14 +16,14 @@ theme.tasklist_disable_icon = true
 
 
 -- {{{ Styles
-theme.font      = "Cantarell 8"
+theme.font      = "Consolas 8"
 
 -- {{{ Colors
 theme.fg_normal  = "#DCDCCC"
 theme.fg_focus   = "#FFFFFF"
 theme.fg_urgent  = "#CC9393"
 theme.bg_normal  = "#212121"
-theme.bg_focus   = "#5599FF"
+theme.bg_focus   = "#282c34"
 theme.bg_urgent  = "#212121"
 theme.bg_systray = theme.bg_normal
 -- }}}
@@ -88,8 +88,8 @@ theme.menu_bg_focues = "#FF0000"
 -- }}}
 
 
-theme.taglist_bg_focus = "#d12727"
-theme.taglist_fg_focus = "#FFFFFF"
+theme.taglist_bg_focus = "#282c34"
+theme.taglist_fg_focus = "#ffffff"
 
 -- {{{ Misc
 theme.awesome_icon           = themes_path .. "theme/awesome-icon.png"
