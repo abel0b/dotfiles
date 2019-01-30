@@ -1,14 +1,8 @@
 # dotfiles
-
-My Arch Linux config files.
+config files
 
 ## usage
-Clone this repository.
 ```
-git@github.com:abeliam/dotfiles.git
-```
-
-Run the `configure.sh` script.
-```
-./configure.sh
+git clone https://github.com/abeliam/dotfiles.git
+bash dotfiles link
 ```

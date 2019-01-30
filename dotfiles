@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+
+CWD=$(pwd)
+PACKAGE_MANAGER=pacman
+
+function forall() {
+    for dir in $(ls); do
+        if [ -d $dir ]
+        then
+            $1 $dir
+        fi
+    done
+}
+
+function link() {
+    if [ -f "$1/link.txt" ]
+    then
+        while read line
+        do
+            target=$CWD/$(echo $line | cut -f 1 -d " ")
+            linkname=$(echo $line | cut -f 2 -d " ")
+
+            bash -c "mkdir --parent $(dirname $linkname)"
+            bash -c "rm -rf $linkname"
+            bash -c "ln -sf --no-target-directory $target $linkname"
+        done < "$1/link.txt"
+        echo "+ $1"
+    fi
+}
+
+function unlink() {
+    if [ -f "$1/link.txt" ]
+    then
+        while read line
+        do
+            bash -c "unlink $(echo $CWD/$line | cut -d " " -f 2) || true"
+        done < "$1/link.txt"
+        echo "- $1"
+    fi
+}
+
+function install() {
+    if [ -f "$1/install.txt" ]
+    then
+        $PACKAGE_MANAGER -S - < $1/install.txt
+    fi
+    echo "+ $1"
+}
+
+function uninstall() {
+    if [ -f "$1/install.txt" ]
+    then
+        $PACKAGE_MANAGER -R - < $1/install.txt
+    fi
+    echo "- $1"
+}
+
+function command() {
+    if [ -z "$2" ]
+    then
+        forall $1
+    else
+        $1 $2
+    fi
+}
+
+function main() {
+    case "$1" in
+        "link")
+            command link $2;;
+        "unlink")
+            command unlink $2;;
+        "install")
+            command install $2;;
+        "uninstall")
+            command uninstall $2;;
+        *)
+            echo "usage: dotfiles (link|unlink|install|uninstall)";;
+    esac
+}
+
+main $*
