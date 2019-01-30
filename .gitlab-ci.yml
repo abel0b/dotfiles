@@ -1,0 +1,10 @@
+stages:
+    - test
+
+test:
+    stage: test
+    image: archlinux/base
+    before_script:
+        - pacman -Sy
+    script:
+        - bash -e dotfiles link
