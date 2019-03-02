@@ -24,7 +24,7 @@ function link() {
             bash -c "rm -rf $linkname"
             bash -c "ln -sf --no-target-directory $target $linkname"
         done < "$1/link.txt"
-        echo "+ $1"
+        echo -e "\e[32m+\e[0m $1"
     fi
 }
 
@@ -35,7 +35,7 @@ function unlink() {
         do
             bash -c "unlink $(echo $CWD/$line | cut -d " " -f 2) || true"
         done < "$1/link.txt"
-        echo "- $1"
+        echo -e "\e[31m-\e[0m $1"
     fi
 }
 
@@ -44,7 +44,7 @@ function install() {
     then
         $PACKAGE_MANAGER -S - < $1/install.txt
     fi
-    echo "+ $1"
+    echo -e "\e[32m+\e[0m $1"
 }
 
 function uninstall() {
@@ -52,7 +52,7 @@ function uninstall() {
     then
         $PACKAGE_MANAGER -R - < $1/install.txt
     fi
-    echo "- $1"
+    echo -e "\e[31m-\e[0m $1"
 }
 
 function command() {
