@@ -7,4 +7,4 @@ test:
     before_script:
         - pacman -Sy
     script:
-        - bash -e dotfiles link
+        - curl https://gitlab.com/abeliam/dotfiles/raw/master/bootstrap | bash -

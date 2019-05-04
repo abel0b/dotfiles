@@ -42,7 +42,7 @@ function unlink() {
 function install() {
     if [ -f "$1/install.txt" ]
     then
-        $PACKAGE_MANAGER -S - < $1/install.txt
+        $PACKAGE_MANAGER --sync --needed --noconfirm - < $1/install.txt
     fi
     echo -e "\e[32m+\e[0m $1"
 }
@@ -50,7 +50,7 @@ function install() {
 function uninstall() {
     if [ -f "$1/install.txt" ]
     then
-        $PACKAGE_MANAGER -R - < $1/install.txt
+        $PACKAGE_MANAGER -R --noconfirm - < $1/install.txt
     fi
     echo -e "\e[31m-\e[0m $1"
 }
@@ -64,19 +64,10 @@ function command() {
     fi
 }
 
-function main() {
-    case "$1" in
-        "link")
-            command link $2;;
-        "unlink")
-            command unlink $2;;
-        "install")
-            command install $2;;
-        "uninstall")
-            command uninstall $2;;
-        *)
-            echo "usage: dotfiles (link|unlink|install|uninstall)";;
-    esac
-}
-
-main $*
+command=$1
+if [[ "$command" =~ ^(link|unlink|install|uninstall)$ ]]
+then
+    command $command $2
+else
+    echo "usage: dotfiles (link|unlink|install|uninstall)"
+fi

@@ -3,8 +3,13 @@
 # dotfiles
 config files
 
-## usage
+## bootstrap
+```bash
+curl https://gitlab.com/abeliam/dotfiles/raw/master/bootstrap | bash -
 ```
-git clone https://github.com/abeliam/dotfiles.git
+
+## install and link
+```bash
+bash dotfiles install
 bash dotfiles link
 ```
