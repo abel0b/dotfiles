@@ -63,7 +63,7 @@ function softwares {
     makepkg -si
     cd ..
 
-    su -c "rm -rf ~/dotfiles && git clone https://gitlab.com/abeliam/dotfiles.git ~/dotfiles && cd ~/dotfiles && bash dotfiles install && bash dotfiles link" $username
+    su -c "rm -rf ~/dotfiles && git clone https://gitlab.com/abeliam/dotfiles.git ~/dotfiles && cd ~/dotfiles && git remote add github https://github.com/abeliam/dotfiles.git && bash dotfiles install && bash dotfiles link" $username
 }
 
 if [ -z "$1" ]
