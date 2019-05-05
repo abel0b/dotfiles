@@ -3,10 +3,9 @@ stages:
 
 test:
     stage: test
-    image: archlinux/base
+    image: archlinux/base-devel
     before_script:
         - pacman -Sy
-        - pacman -S --noconfirm base-devel
         - touch /etc/sudoers
     script:
         - curl https://gitlab.com/abeliam/dotfiles/raw/master/bootstrap | bash -
