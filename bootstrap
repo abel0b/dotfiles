@@ -53,6 +53,16 @@ function softwares {
     echo -e "\e[32m+\e[0m Softwares"
     pacman --sync --needed --noconfirm git
 
+    cd $(mktemp -d)
+    git clone https://aur.archlinux.org/package-query.git
+    cd package-query
+    makepkg -si
+    cd ..
+    git clone https://aur.archlinux.org/yaourt.git
+    cd yaourt
+    makepkg -si
+    cd ..
+
     su -c "rm -rf ~/dotfiles && git clone https://gitlab.com/abeliam/dotfiles.git ~/dotfiles && cd ~/dotfiles && bash dotfiles install && bash dotfiles link" $username
 }
 
