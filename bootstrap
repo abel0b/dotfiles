@@ -53,16 +53,10 @@ function softwares {
     echo -e "\e[32m+\e[0m Softwares"
     pacman --sync --needed --noconfirm git
 
-    cd $(mktemp -d)
-    git clone https://aur.archlinux.org/package-query.git
-    cd package-query
-    su -c "makepkg -si --noconfirm" $username
-    cd ..
-    git clone https://aur.archlinux.org/yaourt.git
-    cd yaourt
-    su -c "makepkg -si --noconfirm" $username
-    cd ..
-
+    tmpdir=$(su -c "cd ~ && mktemp -d -p ." $username)
+    su -c "cd ~/$tmpdir && git clone https://aur.archlinux.org/package-query.git && cd package-query && makepkg -si --noconfirm" $username
+    su -c "cd ~/$tmpdir && git clone https://aur.archlinux.org/yaourt.git && cd yaourt && makepkg -si --noconfirm" $username
+    su -c "rm -r ~/$tmpdir" $username
     su -c "rm -rf ~/dotfiles && git clone https://gitlab.com/abeliam/dotfiles.git ~/dotfiles && cd ~/dotfiles && git remote add github https://github.com/abeliam/dotfiles.git && bash dotfiles install && bash dotfiles link" $username
 }
 
