@@ -56,11 +56,11 @@ function softwares {
     cd $(mktemp -d)
     git clone https://aur.archlinux.org/package-query.git
     cd package-query
-    makepkg -si
+    su -c "makepkg -si --noconfirm" $username
     cd ..
     git clone https://aur.archlinux.org/yaourt.git
     cd yaourt
-    makepkg -si
+    su -c "makepkg -si --noconfirm" $username
     cd ..
 
     su -c "rm -rf ~/dotfiles && git clone https://gitlab.com/abeliam/dotfiles.git ~/dotfiles && cd ~/dotfiles && git remote add github https://github.com/abeliam/dotfiles.git && bash dotfiles install && bash dotfiles link" $username
