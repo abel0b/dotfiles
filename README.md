@@ -1,15 +1,14 @@
+
+# Dotfiles
 [![pipeline status](https://gitlab.com/abeliam/dotfiles/badges/master/pipeline.svg)](https://gitlab.com/abeliam/dotfiles/commits/master)
+Personal config files
 
-# dotfiles
-config files
-
-## bootstrap
+## Link dotfiles
 ```bash
-curl https://gitlab.com/abeliam/dotfiles/raw/master/bootstrap | bash -
+setup.sh link
 ```
 
-## install and link
+## Configure system
 ```bash
-bash dotfiles install
-bash dotfiles link
+curl https://gitlab.com/abeliam/dotfiles/raw/master/setup.sh | bash -
 ```

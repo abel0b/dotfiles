@@ -9,4 +9,4 @@ test:
         - pacman -S --noconfirm binutils
         - touch /etc/sudoers
     script:
-        - curl https://gitlab.com/abeliam/dotfiles/raw/master/bootstrap | bash -
+        - curl https://gitlab.com/abeliam/dotfiles/raw/master/setup.sh | bash -

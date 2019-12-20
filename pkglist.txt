@@ -1,0 +1,14 @@
+ttf-croscore
+alacritty
+openssh
+gdm
+geogebra
+plasma-desktop
+openvpn
+networkmanager-openvpn
+tmux
+whois
+alacritty
+vim
+atom
+fish
