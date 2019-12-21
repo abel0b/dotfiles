@@ -1,13 +1,9 @@
 "*":
-  "atom-ide-ui":
-    use: {}
   core:
+    autoHideMenuBar: true
+    disabledPackages: [
+      "file-icons"
+    ]
     telemetryConsent: "no"
   editor:
-    showInvisibles: true
-  "exception-reporting":
-    userId: "c16abf49-dbce-4c58-a395-b2a1b04c9337"
-".blade.html.php.text":
-  editor:
-    commentEnd: " --}}"
-    commentStart: "{{-- "
+    tabLength: 4

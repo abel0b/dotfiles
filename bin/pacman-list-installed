@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# Get list of packages installed by user
+# https://unix.stackexchange.com/questions/409895/pacman-get-list-of-packages-installed-by-user
+
+comm -23 <(pacman -Qqett | sort) <(pacman -Qqg base -g base-devel | sort | uniq)

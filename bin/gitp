@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Push changes to all remotes
+
 branch=${1:-master}
 
 git remote | xargs -L1 -I REMOTE git push REMOTE $branch

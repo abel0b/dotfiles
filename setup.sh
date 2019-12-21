@@ -48,13 +48,13 @@ function unlink() {
 
 function setup() {
     username=abel
-	  shell=/usr/bin/bash
-	  hostname=abelpc
-	  local_domain=null
-	  region=Europe
-	  city=Paris
-	  locale=en_US.UTF-8
-	  keymap=fr
+    shell=/usr/bin/bash
+    hostname=abelpc
+    local_domain=null
+    region=Europe
+    city=Paris
+    locale=en_US.UTF-8
+    keymap=fr
 
     # Time zone
     function time_zone {
@@ -99,6 +99,7 @@ function setup() {
         echo -e "\e[32m+\e[0m Softwares"
         pacman --sync --needed --noconfirm git
         pacman --sync --needed --noconfirm - < pkglist.txt
+        apm install --packages-file dotfiles/atom/package-list.txt
 
         if [ -z ${CI+x} ]
         then
@@ -111,14 +112,14 @@ function setup() {
     }
     if [ -z "$1" ]
     then
-      time_zone
-      localization
-      keyboard
-      network
-      users
-      softwares
+        time_zone
+        localization
+        keyboard
+        network
+        users
+        softwares
     else
-      $1
+        $1
     fi
 }
 
@@ -127,5 +128,5 @@ if [[ "$command" =~ ^(link|unlink|setup)$ ]]
 then
     $command $2
 else
-    echo "usage: dotfiles [link|unlink|setup]"
+    echo "Usage: $0 [link|unlink|setup]"
 fi
