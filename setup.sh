@@ -18,10 +18,22 @@ function link_one() {
         do
             target=$CWD/dotfiles/$(echo $line | cut -f 1 -d " ")
             linkname=$(echo $line | cut -f 2 -d " ")
+            linkname="${linkname/#\~/$HOME}"
 
-            bash -c "mkdir --parent $(dirname $linkname)"
-            bash -c "rm -rf $linkname"
-            bash -c "ln -sf --no-target-directory $target $linkname"
+            mkdir --parent $(dirname $linkname)
+            
+            if [ -e $linkname ]
+            then
+                if [[ -L $linkname && $(readlink $linkname) == $target ]]
+                then
+                    :
+                else
+                    echo -e "\e[31m[error]\e[0m File already exists $linkname"
+                fi
+            else
+                echo $target $linkname
+                ln -s --no-target-directory $target $linkname
+            fi
         done < "dotfiles/$1/link.txt"
         echo -e "\e[32m+\e[0m $1"
     fi
@@ -107,7 +119,7 @@ function setup() {
             su -c "cd ~/$tmpdir && git clone https://aur.archlinux.org/package-query.git && cd package-query && makepkg -si --noconfirm" $username
             su -c "cd ~/$tmpdir && git clone https://aur.archlinux.org/yay.git && cd yaourt && makepkg -si --noconfirm" $username
             su -c "rm -r ~/$tmpdir" $username
-            su -c "rm -rf ~/dotfiles && git clone https://gitlab.com/abeliam/dotfiles.git ~/dotfiles && cd ~/dotfiles && git remote add github https://github.com/abeliam/dotfiles.git && ./setup.sh link" $username
+            su -c "rm -rf ~/dotfiles && git clone https://gitlab.com/abeliam/dotfiles.git ~/dotfiles && cd ~/dotfiles && git remote add github https://github.com/abeliam/dotfiles.git && git submodule update && ./setup.sh link" $username
         fi
     }
     if [ -z "$1" ]

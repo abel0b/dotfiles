@@ -1,0 +1,9 @@
+[submodule "dotfiles/vim/pack/fzf"]
+	path = dotfiles/vim/pack/fzf
+	url = git@github.com:junegunn/fzf.vim.git
+[submodule "dotfiles/vim/pack/plugins/start/lightline"]
+	path = dotfiles/vim/pack/plugins/start/lightline
+	url = https://github.com/itchyny/lightline.vim
+[submodule "dotfiles/vim/pack/tpope/start/eunuch"]
+	path = dotfiles/vim/pack/tpope/start/eunuch
+	url = https://tpope.io/vim/eunuch.git

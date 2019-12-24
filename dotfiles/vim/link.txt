@@ -1,1 +1,2 @@
 vim/.vimrc ~/.vimrc
+vim/pack ~/.vim/pack
