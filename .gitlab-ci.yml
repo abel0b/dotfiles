@@ -9,4 +9,5 @@ test:
         - pacman -S --noconfirm binutils
         - touch /etc/sudoers
     script:
-        - curl https://gitlab.com/abeliam/dotfiles/raw/master/setup.sh | bash -
+        - curl https://raw.githubusercontent.com/abel0b/dotfiles/master/system/sync.sh | bash -
+

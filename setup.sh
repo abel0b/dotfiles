@@ -1,132 +1,160 @@
 #!/usr/bin/env bash
 
-CWD=$(pwd)
-PACKAGE_MANAGER=pacman
-PACKAGE_MANAGER_INSTALL="--sync --needed --noconfirm"
-PACKAGE_MANAGER_REMOVE="--remove --noconfirm"
+DOTFILES=${DOTFILES:-$(pwd)}
+CACHE_DIRECTORY=${CACHE_DIRECTORY:-$DOTFILES/cache}
 
-function forall() {
-    for dir in $(ls dotfiles); do
-        $1 $dir
+function expand_home {
+    echo "${1/#\~/$HOME}"
+}
+
+function list() { 
+    for dir in $(ls config)
+    do
+        echo $dir
     done
 }
 
-function link_one() {
-    if [ -f "dotfiles/$1/link.txt" ]
-    then
-        while read line
-        do
-            target=$CWD/dotfiles/$(echo $line | cut -f 1 -d " ")
-            linkname=$(echo $line | cut -f 2 -d " ")
+function status() {
+    for dir in $(ls $DOTFILES/config)
+    do
+        echo $dir
+        if [ -f "$DOTFILES/config/$dir/link.txt" ]
+        then
+            while read line
+            do
+                tokens=($line)
+                target=${tokens[0]}
+                linkname=$(expand_home ${tokens[1]})
+                
+                if [[ $target =~ "://" ]]
+                then
+                    protocol=$(echo $target | cut -d : -f 1)
+                    case $protocol in
+                        "http"|"https")
+                            target=$CACHE_DIRECTORY/$(basename $linkname)
+                            ;;
+                        *)
+                            echo -e "\e[31m[error]\e[0m Unknown protocol $protocol"
+                            continue
+                            ;;
+                    esac
+                else
+                    target=$DOTFILES/config/$target
+                fi
 
-            bash -c "mkdir --parent $(dirname $linkname)"
-            bash -c "rm -rf $linkname"
-            bash -c "ln -sf --no-target-directory $target $linkname"
-        done < "dotfiles/$1/link.txt"
-        echo -e "\e[32m+\e[0m $1"
-    fi
+                if [[ -e $linkname && -L $linkname && $(readlink $linkname) == $target ]]
+                then
+                    echo -e "    \e[0;32m$linkname -> $target\e[0m"
+                else
+                    echo -e "    \e[0;31m$linkname ->\e[0m"
+                fi
+            done < "$DOTFILES/config/$dir/link.txt"
+        fi
+    done
 }
 
-function unlink_one() {
-    if [ -f "dotfiles/$1/link.txt" ]
-    then
-        while read line
-        do
-            bash -c "unlink $(echo $CWD/dotfiles/$line | cut -d " " -f 2) || true"
-        done < "dotfiles/$1/link.txt"
-        echo -e "\e[31m-\e[0m $1"
-    fi
-}
 
 function link() {
-    forall link_one
+    if [ -f "$DOTFILES/config/$1/link.txt" ]
+    then
+        while read line
+        do
+            tokens=($line)
+            target=${tokens[0]}
+            linkname=$(expand_home ${tokens[1]})
+
+            mkdir --parent $(dirname $linkname)
+
+            if [[ $target =~ "://" ]]
+            then
+                protocol=$(echo $target | cut -d : -f 1)
+                case $protocol in
+                    "http"|"https")
+                        tmp=$CACHE_DIRECTORY/$(basename $linkname)
+                        if [[ ! -f $tmp ]]
+                        then
+                            curl -LJ0 $target > $tmp
+                        fi
+                        target=$tmp
+                        ;;
+                    *)
+                        echo -e "\e[31m[error]\e[0m Unknown protocol $protocol"
+                        continue
+                        ;;
+                esac
+            else
+                target=$DOTFILES/config/$target
+            fi
+            
+            if [ -e $linkname ]
+            then
+                if [[ -L $linkname && $(readlink $linkname) == $target ]]
+                then
+                    :
+                else
+                    echo -e "\e[31m[error]\e[0m File already exists $linkname"
+                    diff --color -u $linkname $target
+                fi
+            else
+                ln -s --no-target-directory $target $linkname
+            fi
+        done < "$DOTFILES/config/$1/link.txt"
+    fi
 }
 
 function unlink() {
-    forall unlink_one
-}
-
-function setup() {
-    username=abel
-    shell=/usr/bin/bash
-    hostname=abelpc
-    local_domain=null
-    region=Europe
-    city=Paris
-    locale=en_US.UTF-8
-    keymap=fr
-
-    # Time zone
-    function time_zone {
-        echo -e "\e[32m+\e[0m Time zone"
-        ln -sf "/usr/share/zoneinfo/$region/$city" /etc/localtime
-    }
-
-    # Localization
-    function localization {
-        echo -e "\e[32m+\e[0m Localization"
-        sed -i "s/^#$locale/$locale/g" /etc/locale.gen
-        locale-gen
-        echo "LANG=$locale" > /etc/locale.conf
-    }
-
-    # Keyboard
-    function keyboard {
-        echo -e "\e[32m+\e[0m Keyboard"
-        echo "KEYMAP=$keymap" > /etc/vconsole.conf
-    }
-
-    # Network
-    function network {
-        echo -e "\e[32m+\e[0m Network"
-        echo "$hostname" > /etc/hostname
-        echo "# Static table lookup for hostnames." > /etc/hosts
-        echo "# See hosts(5) for details." >> /etc/hosts
-        echo "127.0.0.1 localhost" >> /etc/hosts
-        echo "::1		    localhost" >> /etc/hosts
-        echo "127.0.1.1	$hostname.$local_domain" >> /etc/hosts
-    }
-
-    # Users
-    function users {
-        echo "root ALL=(ALL) ALL" > /etc/sudoers
-        echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
-        useradd -m -g users -G wheel -s $shell $username || true
-    }
-
-    # Softwares
-    function softwares {
-        echo -e "\e[32m+\e[0m Softwares"
-        pacman --sync --needed --noconfirm git
-        pacman --sync --needed --noconfirm - < pkglist.txt
-        apm install --packages-file dotfiles/atom/package-list.txt
-
-        if [ -z ${CI+x} ]
-        then
-            tmpdir=$(su -c "cd ~ && mktemp -d -p ." $username)
-            su -c "cd ~/$tmpdir && git clone https://aur.archlinux.org/package-query.git && cd package-query && makepkg -si --noconfirm" $username
-            su -c "cd ~/$tmpdir && git clone https://aur.archlinux.org/yay.git && cd yaourt && makepkg -si --noconfirm" $username
-            su -c "rm -r ~/$tmpdir" $username
-            su -c "rm -rf ~/dotfiles && git clone https://gitlab.com/abeliam/dotfiles.git ~/dotfiles && cd ~/dotfiles && git remote add github https://github.com/abeliam/dotfiles.git && ./setup.sh link" $username
-        fi
-    }
-    if [ -z "$1" ]
+    if [ -f "$DOTFILES/config/$1/link.txt" ]
     then
-        time_zone
-        localization
-        keyboard
-        network
-        users
-        softwares
-    else
-        $1
+        while read line
+        do
+            tokens=($line)
+            linkname=$(expand_home ${tokens[1]})
+            rm -f $linkname
+        done < "$DOTFILES/config/$1/link.txt"
     fi
 }
 
-command=${1:-setup}
-if [[ "$command" =~ ^(link|unlink|setup)$ ]]
+function sync() {
+    mkdir --parent cache
+    
+    for dir in $(ls config)
+    do
+        link $dir
+        echo -e "\e[32m+\e[0m $dir"
+    done
+}
+
+function unsync() {
+    for dir in $(ls config)
+    do
+        unlink $dir
+        echo -e "\e[31m-\e[0m $dir"
+    done
+
+    rm -rf cache
+}
+
+function system() {
+    $DOTFILES/system/sync.sh
+}
+
+function help() {
+    echo "@abel0b dotfiles $(git rev-parse --short HEAD)"
+    echo "Usage: $0 (sync|unsync|setup|status)"
+    echo
+    echo "Commands:"
+    echo "  sync    Link and copy dotfiles"
+    echo "  unsync  Remove dotfiles"
+    echo "  setup   Setup new machine environment"
+    echo "  status  Show dotfiles status"
+    echo "  system  Configure system"
+    echo "  help    Show help message"
+}
+
+command=$1
+if [[ "$command" =~ ^(sync|unsync|system|status)$ ]]
 then
     $command $2
 else
-    echo "Usage: $0 [link|unlink|setup]"
+    help
 fi
