@@ -9,5 +9,7 @@
     tabLength: 4
   "exception-reporting":
     userId: "b3f631d3-e512-411f-ae12-6a96ff2f0c45"
+  "linter-ui-default":
+    showPanel: true
   welcome:
     showOnStartup: false

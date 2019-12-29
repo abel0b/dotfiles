@@ -7,7 +7,7 @@ function expand_home {
     echo "${1/#\~/$HOME}"
 }
 
-function list() { 
+function list() {
     for dir in $(ls config)
     do
         echo $dir
@@ -25,7 +25,7 @@ function status() {
                 tokens=($line)
                 target=${tokens[0]}
                 linkname=$(expand_home ${tokens[1]})
-                
+
                 if [[ $target =~ "://" ]]
                 then
                     protocol=$(echo $target | cut -d : -f 1)
@@ -85,7 +85,7 @@ function link() {
             else
                 target=$DOTFILES/config/$target
             fi
-            
+
             if [ -e $linkname ]
             then
                 if [[ -L $linkname && $(readlink $linkname) == $target ]]
@@ -116,7 +116,7 @@ function unlink() {
 
 function sync() {
     mkdir --parent cache
-    
+
     for dir in $(ls config)
     do
         link $dir
