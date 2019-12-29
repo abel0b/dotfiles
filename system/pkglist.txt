@@ -22,5 +22,4 @@ tmux
 ttf-croscore
 vim
 whois
-wine
 zip
