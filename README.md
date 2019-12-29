@@ -4,9 +4,8 @@ Personal configuration files
 ## Usage
 - `sync`    Link and copy dotfiles
 - `unsync`  Remove dotfiles
-- `setup`   Setup new machine environment
 - `status`  Show dotfiles status
-- `system`  Configure system
+- `system`  Configure new machine
 - `help`    Show help message
 
 

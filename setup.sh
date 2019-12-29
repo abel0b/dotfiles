@@ -145,7 +145,6 @@ function help() {
     echo "Commands:"
     echo "  sync    Link and copy dotfiles"
     echo "  unsync  Remove dotfiles"
-    echo "  setup   Setup new machine environment"
     echo "  status  Show dotfiles status"
     echo "  system  Configure system"
     echo "  help    Show help message"
