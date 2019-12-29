@@ -2,6 +2,10 @@
 Personal configuration files
 
 ## Usage
+```bash
+./setup.sh [COMMAND]
+```
+### Commands
 - `sync`    Link and copy dotfiles
 - `unsync`  Remove dotfiles
 - `status`  Show dotfiles status
