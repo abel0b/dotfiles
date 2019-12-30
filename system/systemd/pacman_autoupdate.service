@@ -1,0 +1,9 @@
+[Unit]
+Description=Pacman automatic update
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/pacman -Syuq --noconfirm --needed --noprogressbar
+
+[Install]
+WantedBy=multi-user.target

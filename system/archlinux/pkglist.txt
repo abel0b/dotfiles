@@ -1,6 +1,7 @@
 alacritty
 atom
 docker
+fd
 fish
 fzf
 gdm
@@ -8,6 +9,7 @@ geogebra
 gimp
 git
 gnuplot
+inotify-tools
 networkmanager-openvpn
 opencv
 openmp
@@ -15,6 +17,7 @@ openmpi
 openssh
 openvpn
 plasma-desktop
+ripgrep
 rustup
 sshfs
 texlive-most

@@ -1,0 +1,4 @@
+plasma-org.kde.plasma.desktop-appletsrc ~/.config/plasma-org.kde.plasma.desktop-appletsrc
+kded5rc ~/.config/kded5rc
+kdenliverc ~/.config/kdenliverc
+kdeglobals ~/.config/kdeglobals

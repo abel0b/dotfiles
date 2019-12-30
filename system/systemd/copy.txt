@@ -1,0 +1,3 @@
+pacman_autoupdate.service /etc/systemd/system/pacman_autoupdate.service
+pacman_autoupdate.timer /etc/systemd/system/pacman_autoupdate.timer
+

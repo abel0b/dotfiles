@@ -5,6 +5,7 @@ Personal configuration files
 ```bash
 ./setup.sh [COMMAND]
 ```
+
 ### Commands
 - `sync`    Link and copy dotfiles
 - `unsync`  Remove dotfiles
@@ -12,8 +13,8 @@ Personal configuration files
 - `system`  Configure new machine
 - `help`    Show help message
 
-
 ## Configure new machine
 ```bash
-curl https://raw.githubusercontent.com/abel0b/dotfiles/master/system/sync.sh | bash -
+curl https://raw.githubusercontent.com/abel0b/dotfiles/master/installer.sh | bash -
 ```
+

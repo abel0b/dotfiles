@@ -1,0 +1,9 @@
+[Unit]
+Description=Pacman automatic update
+
+[Timer]
+OnCalendar=*-*-* 12:30:00
+Unit=pacman_autoupdate.service
+
+[Install]
+WantedBy=multi-user.target

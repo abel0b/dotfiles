@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-# List largest files sorted by size
-
-du -h | sort -h
-

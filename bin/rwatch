@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-# Usage: rwatch [directory] [command]
-# Execute a command whenever a file change in directory 
-
-while inotifywait -r -e create -e delete -e modify $1; do bash -c "$2"; done
