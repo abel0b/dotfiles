@@ -1,0 +1,24 @@
+[KFileDialog Settings]
+Recent Files[$e]=wallpaper.png,file:$HOME/Downloads/fantasy-colorful-cosmos-art.jpg
+Recent URLs[$e]=file:$HOME/Downloads/
+detailViewIconSize=0
+listViewIconSize=0
+
+[PlasmaRunnerManager]
+LaunchCounts=1 services_urxvt.desktop,14 services_org.kde.konsole.desktop,82 services_firefox.desktop,1 services_gimp.desktop,1 services_wayland.desktop,1 services_systemsettings.desktop,3 services_org.kde.dolphin.desktop,1 services_vim.desktop,1 services_org.kde.kdenlive.desktop,97 services_alacritty.desktop,22 services_org.gnome.Terminal.desktop,1 services_interrupts.desktop
+pluginWhiteList=services,shell,bookmarks,baloosearch,locations
+
+[PlasmaTransientsConfig]
+PreloadWeight=0
+
+[PlasmaViews][Panel 2][Defaults]
+thickness=28
+
+[PlasmaViews][Panel 2][Horizontal1920]
+thickness=28
+
+[ScreenConnectors]
+0=HDMI-1
+
+[Updates]
+performed=/usr/share/plasma/shells/org.kde.plasma.desktop/contents/updates/obsolete_kickoffrc.js,/usr/share/plasma/shells/org.kde.plasma.desktop/contents/updates/move_desktop_layout_config.js

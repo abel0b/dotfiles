@@ -3,6 +3,7 @@ atom
 docker
 fd
 fish
+firefox-developer-edition
 fzf
 gdm
 geogebra
@@ -23,6 +24,7 @@ sshfs
 texlive-most
 tmux
 ttf-croscore
+valgrind
 vim
 whois
 zip

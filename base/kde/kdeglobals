@@ -113,12 +113,12 @@ TerminalApplication[$e]=alacritty
 XftAntialias=true
 XftHintStyle=
 XftSubPixel=none
-dbfile=/home/abel/.mozilla/firefox/odt2j3sc.default/places.sqlite
+dbfile=/home/abel/.mozilla/firefox/f4du4wg2.default-1549214124809/places.sqlite
 shadeSortColumn=true
 widgetStyle=Breeze
 
 [Icons]
-Theme=breeze-dark
+Theme=Materia-Manjaro-Dark
 
 [KDE]
 ColorScheme=Breeze

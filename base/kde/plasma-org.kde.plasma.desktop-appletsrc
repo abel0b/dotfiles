@@ -8,7 +8,7 @@ RightButton;NoModifier=org.kde.contextmenu
 
 [Containments][1]
 ItemGeometriesHorizontal=
-activityId=1817deca-88fa-49c9-b60a-f2d2669608ab
+activityId=90f86813-f683-4cee-8eb7-98ce80adcba1
 formfactor=0
 immutability=1
 lastScreen=0
@@ -43,43 +43,10 @@ PreloadWeight=0
 
 [Containments][1][General]
 ToolBoxButtonState=topright
-ToolBoxButtonX=1570
-sortMode=-1
+ToolBoxButtonX=1890
 
 [Containments][1][Wallpaper][org.kde.image][General]
-Image=file:///home/abel/dotfiles/config/kde/shield.png
-
-[Containments][25]
-ItemGeometriesHorizontal=
-activityId=1817deca-88fa-49c9-b60a-f2d2669608ab
-formfactor=0
-immutability=1
-lastScreen=1
-location=0
-plugin=org.kde.plasma.folder
-wallpaperplugin=org.kde.image
-
-[Containments][25][Configuration]
-PreloadWeight=0
-
-[Containments][25][Wallpaper][org.kde.image][General]
-Image=file:///home/abel/dotfiles/config/kde/shield.png
-
-[Containments][51]
-ItemGeometriesHorizontal=
-activityId=1817deca-88fa-49c9-b60a-f2d2669608ab
-formfactor=0
-immutability=1
-lastScreen=3
-location=0
-plugin=org.kde.plasma.folder
-wallpaperplugin=org.kde.image
-
-[Containments][51][Configuration]
-PreloadWeight=0
-
-[Containments][51][Wallpaper][org.kde.image][General]
-Image=file:///home/abel/dotfiles/config/kde/shield.png
+Image=file:///home/abel/dotfiles/base/kde/shield.png
 
 [Containments][55]
 activityId=
@@ -93,6 +60,9 @@ wallpaperplugin=org.kde.image
 [Containments][55][Applets][56]
 immutability=1
 plugin=org.kde.plasma.appmenu
+
+[Containments][55][Applets][56][Configuration]
+PreloadWeight=42
 
 [Containments][55][Applets][57]
 immutability=1
@@ -125,6 +95,9 @@ SystrayContainmentId=60
 immutability=1
 plugin=org.kde.plasma.digitalclock
 
+[Containments][55][Applets][72][Configuration]
+PreloadWeight=55
+
 [Containments][55][Applets][73]
 immutability=1
 plugin=org.kde.plasma.panelspacer
@@ -132,18 +105,25 @@ plugin=org.kde.plasma.panelspacer
 [Containments][55][Applets][73][Configuration][General]
 length=1098
 
+[Containments][55][Applets][87]
+immutability=1
+plugin=org.kde.plasma.pager
+
 [Containments][55][ConfigDialog]
 DialogHeight=84
-DialogWidth=1600
+DialogWidth=1920
+
+[Containments][55][Configuration]
+PreloadWeight=42
 
 [Containments][55][General]
-AppletOrder=57;56;73;59;72
+AppletOrder=57;56;73;87;59;72
 
 [Containments][60]
 activityId=
 formfactor=2
 immutability=1
-lastScreen=-1
+lastScreen=0
 location=3
 plugin=org.kde.plasma.private.systemtray
 wallpaperplugin=org.kde.image
@@ -151,6 +131,9 @@ wallpaperplugin=org.kde.image
 [Containments][60][Applets][61]
 immutability=1
 plugin=org.kde.plasma.volume
+
+[Containments][60][Applets][61][Configuration]
+PreloadWeight=60
 
 [Containments][60][Applets][62][Configuration]
 PreloadWeight=42
@@ -176,7 +159,7 @@ immutability=1
 plugin=org.kde.plasma.vault
 
 [Containments][60][Applets][67][Configuration]
-PreloadWeight=60
+PreloadWeight=65
 
 [Containments][60][Applets][68]
 immutability=1
@@ -190,7 +173,7 @@ immutability=1
 plugin=org.kde.plasma.networkmanagement
 
 [Containments][60][Applets][70][Configuration]
-PreloadWeight=70
+PreloadWeight=100
 
 [Containments][60][Applets][74]
 immutability=1
@@ -205,6 +188,13 @@ plugin=org.kde.kscreen
 
 [Containments][60][Applets][75][Configuration]
 PreloadWeight=55
+
+[Containments][60][Applets][86]
+immutability=1
+plugin=org.kde.plasma.mediacontroller
+
+[Containments][60][Applets][86][Configuration]
+PreloadWeight=0
 
 [Containments][60][ConfigDialog]
 DialogHeight=540

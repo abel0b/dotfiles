@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-DOTFILES_PATH=${DOTFILES_PATH:-$(pwd)}
+DOTFILES_PATH=${DOTFILES_PATH:-$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1 && pwd)}
 CACHE_PATH=${CACHE_PATH:-$DOTFILES_PATH/cache}
 CONFIGS=$(ls -d $DOTFILES_PATH/base/*)
 
@@ -14,13 +14,45 @@ function expand_home {
     echo "${1/#\~/$HOME}"
 }
 
+function fetch {
+    source=$1
+    destination=$2
+
+    if [[ ! $source =~ = ]]
+    then
+        return 1
+    fi
+
+    if [[ -e $destination ]]
+    then
+        return
+    fi
+
+    method=$(echo $source | cut -d = -f 1)
+    resource=$(echo $source | cut -d = -f 2)
+    mkdir -p $(dirname $destination)
+
+    case $method in
+        "curl")
+            curl -LJ0 $resource > $destination
+            ;;
+        "git")
+            git clone $resource $destination
+            ;;
+        *)
+            echo -e "\e[31m[error]\e[0m Unknown method $method"
+            return 1
+            ;;
+    esac
+}
+
 function sync() {
     config=$1
     if [ -f "$config/link.txt" ]
     then
         while read line
         do
-            if [[ "$line" =~ [[:blank:]]* ]]
+            if [[ "$line" =~ ^[[:blank:]]*$ ]]
             then
                 continue
             fi
@@ -28,26 +60,14 @@ function sync() {
             target=${tokens[0]}
             linkname=$(expand_home ${tokens[1]})
 
-            echo "$target $linkname"
             mkdir --parent $(dirname $linkname)
 
-            if [[ $target =~ "://" ]]
+            if [[ $target =~ = ]]
             then
-                protocol=$(echo $target | cut -d : -f 1)
-                case $protocol in
-                    "http"|"https")
-                        tmp=$CACHE_PATH/$(basename $linkname)
-                        if [[ ! -f $tmp ]]
-                        then
-                            curl -LJ0 $target > $tmp
-                        fi
-                        target=$tmp
-                        ;;
-                    *)
-                        echo -e "\e[31m[error]\e[0m Unknown protocol $protocol"
-                        continue
-                        ;;
-                esac
+                destination=$CACHE_PATH/$(basename $config)/$(basename $linkname)
+                fetch $target $destination
+                (($? != 0)) && continue
+                target=$destination
             else
                 target=$config/$target
             fi
@@ -69,39 +89,28 @@ function sync() {
             fi
         done < "$config/link.txt"
     fi
-    
+
     if [ -f "$config/copy.txt" ]
     then
         while read line
         do
-            if [[ "$line" =~ [[:blank:]]* ]]
+            if [[ "$line" =~ ^[[:blank:]]*$ ]]
             then
                 continue
             fi
-            
+
             tokens=($line)
             target=${tokens[0]}
             copyname=$(expand_home ${tokens[1]})
 
             mkdir --parent $(dirname $copyname)
 
-            if [[ $target =~ "://" ]]
+            if [[ $target =~ = ]]
             then
-                protocol=$(echo $target | cut -d : -f 1)
-                case $protocol in
-                    "http"|"https")
-                        tmp=$CACHE_PATH/$(basename $copyname)
-                        if [[ ! -f $tmp ]]
-                        then
-                            curl -LJ0 $target > $tmp
-                        fi
-                        target=$tmp
-                        ;;
-                    *)
-                        echo -e "\e[31m[error]\e[0m Unknown protocol $protocol"
-                        continue
-                        ;;
-                esac
+                destination=$CACHE_PATH/$(basename $config)/$(basename $copyname)
+                fetch $target $destination
+                (($? != 0)) && continue
+                target=$destination
             else
                 target=$config/$target
             fi
@@ -152,37 +161,32 @@ function unsync() {
 }
 
 function dotfiles_status() {
-    if [[ -f $CACHE_PATH/datesync.txt ]]
+    if [[ ! -z "$1" ]]
     then
-        echo "Dotfiles last synced on $(cat $CACHE_PATH/datesync.txt)"
+        CONFIGS=$(ls -d $(realpath $1)/*)
     else
-        echo "Dotfiles not synced"
+        CONFIGS=$(ls -d $DOTFILES_PATH/base/* $DOTFILES_PATH/system/*)
     fi
-    echo
 
     for dir in $CONFIGS
     do
-        echo $bold$(basename $dir)$normal
+        group=$(basename $(dirname $dir))
+        echo $bold$group/$(basename $dir)$normal
         if [ -f "$dir/link.txt" ]
         then
             while read line
             do
+                if [[ "$line" =~ ^[[:blank:]]*$ ]]
+                then
+                    continue
+                fi
                 tokens=($line)
                 target=${tokens[0]}
                 linkname=$(expand_home ${tokens[1]})
 
-                if [[ $target =~ "://" ]]
+                if [[ $target =~ = ]]
                 then
-                    protocol=$(echo $target | cut -d : -f 1)
-                    case $protocol in
-                        "http"|"https")
-                            target=$CACHE_PATH/$(basename $linkname)
-                            ;;
-                        *)
-                            echo -e "\e[31m[error]\e[0m Unknown protocol $protocol"
-                            continue
-                            ;;
-                    esac
+                    target=$CACHE_PATH/$(basename dir)/$(basename $linkname)
                 else
                     target=$dir/$target
                 fi
@@ -195,7 +199,42 @@ function dotfiles_status() {
                 fi
             done < "$dir/link.txt"
         fi
+
+        if [ -f "$dir/copy.txt" ]
+        then
+            while read line
+            do
+                if [[ "$line" =~ ^[[:blank:]]*$ ]]
+                then
+                    continue
+                fi
+                tokens=($line)
+                target=${tokens[0]}
+                copyname=$(expand_home ${tokens[1]})
+
+                if [[ $target =~ = ]]
+                then
+                    target=$CACHE_PATH/$(basename dir)/$(basename $copyname)
+                else
+                    target=$dir/$target
+                fi
+
+                if [[ -f $copyname ]]
+                then
+                    echo -e "    \e[0;32m$copyname =\e[0m"
+                else
+                    echo -e "    \e[0;31m$copyname =\e[0m"
+                fi
+            done < "$dir/copy.txt"
+        fi
     done
+    echo
+    if [[ -f $CACHE_PATH/datesync.txt ]]
+    then
+        echo "last synced on $(cat $CACHE_PATH/datesync.txt)"
+    else
+        echo "not synced"
+    fi
 }
 
 
@@ -209,8 +248,8 @@ function dotfiles_sync() {
 
     for dir in $CONFIGS
     do
-        sync $dir
         echo -e "\e[32m+\e[0m $(basename $dir)"
+        sync $dir
     done
 
     date > $CACHE_PATH/datesync.txt
@@ -219,8 +258,8 @@ function dotfiles_sync() {
 function dotfiles_unsync() {
     for dir in $CONFIGS
     do
-        unsync $dir
         echo -e "\e[31m-\e[0m $(basename $dir)"
+        unsync $dir
     done
 
     rm -rf $CACHE_PATH
@@ -231,14 +270,74 @@ function dotfiles_system() {
 }
 
 function dotfiles_import() {
-    echo Feature not implemented
+    dotfile=$1
+    topic=$2
+
+    if [[ -z ${dotfile:+x} ]]
+    then
+        echo -e "\e[31m[error]\e[0m Missing argument dotfile"
+        exit 1
+    fi
+
+    if [[ -z ${topic:+x} ]]
+    then
+        echo -e "\e[31m[error]\e[0m Missing argument topic"
+        exit 1
+    fi
+
+    target=$(basename $dotfile)
+    linkname=$(realpath $dotfile)
+
+    mkdir -p $DOTFILES_PATH/base/$topic
+
+    mv $dotfile $DOTFILES_PATH/base/$topic
+
+    echo "$target $linkname" >> $DOTFILES_PATH/base/$topic/link.txt
 }
 
-DOTFILES_COMMAND="sync unsync help status import"
+function dotfiles_remove() {
+    dotfile_path=$1
+    dotfile=$(basename $1)
+    config=$(dirname $dotfile_path)
+
+    if [[ -L "$dotfile_path" ]]
+    then
+        dotfile_path=$(readlink $dotfile_path)
+        dotfile=$(basename $dotfile_path)
+        config=$(dirname $dotfile_path)
+    fi
+
+    rm -rf $dotfile_path
+
+    if [ -f "$config/link.txt" ]
+    then
+        echo "$dotfile_path $dotfile $config"
+        tokens=$(cat $config/link.txt | grep $dotfile)
+
+        if [[ ! -z "$tokens" ]]
+        then
+            tokens=($tokens)
+            echo $tokens
+            linkname=$tokens[1]
+            cat $config/link.txt | grep -v $dotfile | tee $config/link.txt
+            if [[ -L "$linkname" ]]
+            then
+                rm $linkname
+            fi
+        fi
+    fi
+}
+
+function dotfiles_path() {
+    echo $DOTFILES_PATH
+}
+
+commands="sync unsync help status import remove path"
+version=v$(git --git-dir $DOTFILES_PATH/.git rev-list --all --count).$(git --git-dir $DOTFILES_PATH/.git rev-parse --short HEAD)$([[ -z "$(git --git-dir $DOTFILES_PATH/.git status --porcelain --untracked-files=no)" ]] || echo "+")
 
 function dotfiles_help() {
-    echo "$bold@abel0b$normal dotfiles manager $(git rev-parse --short HEAD)"
-    echo "Usage: $(basename $0) [command] [-f] [-v|-q]"
+    echo "$bold@abel0b$normal dotfiles manager $version"
+    echo "Usage: $(basename $0) [command] [-V] [-f] [-v|-q]"
     echo
     echo "Commands:"
     echo "  sync    Link and copy dotfiles"
@@ -246,8 +345,15 @@ function dotfiles_help() {
     echo "  status  Show dotfiles status"
     echo "  help    Show help message"
     echo "  import  Import a dotfile"
-}
+    echo "  remove  Remove a dotfile"
+    echo
+    echo "Options:"
+    echo "  -f      Remove existing destination files"
+    echo "  -v      Enable verbose output"
+    echo "  -q      Enable quiet output"
+    echo "  -V      Show version number"
 
+}
 
 command=""
 arguments=""
@@ -266,8 +372,12 @@ do
         -d|--debug)
             set -x
             ;;
+        -V)
+            echo $version
+            exit 0
+            ;;
         -*)
-            echo "\e[31m[error]\e[0m Unknown option $token"
+            echo -e "\e[31m[error]\e[0m Unknown option $token"
             exit
             ;;
         *)
@@ -283,7 +393,7 @@ done
 
 command=${command:-help}
 
-if [[ "$command" =~ ^(${DOTFILES_COMMAND//[[:space:]]/\|})$ ]]
+if [[ "$command" =~ ^(${commands//[[:space:]]/\|})$ ]]
 then
     dotfiles_$command $arguments
 else
@@ -291,4 +401,3 @@ else
     echo
     dotfiles_help
 fi
-

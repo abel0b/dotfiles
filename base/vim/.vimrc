@@ -29,5 +29,8 @@ inoremap <S-Down> <Esc>:m+<CR>
 call plug#begin('~/.vim/plugged')
 Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdcommenter'
+Plug 'chriskempson/base16-vim'
 call plug#end()
 
+let base16colorspace=256
+colorscheme base16-classic-dark

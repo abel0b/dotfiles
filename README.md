@@ -17,4 +17,3 @@ Personal configuration files
 ```bash
 curl https://raw.githubusercontent.com/abel0b/dotfiles/master/installer.sh | bash -
 ```
-

@@ -1,0 +1,9 @@
+[user]
+	email = abelcd@protonmail.com
+	name = Abel Calluaud
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+    df = diff

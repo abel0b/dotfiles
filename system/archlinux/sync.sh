@@ -37,7 +37,7 @@ function network {
 # Users
 function users {
     echo "root ALL=(ALL) ALL" > /etc/sudoers
-    echo "abel ALL=(ALL) ALL" >> /etc/sudoers
+    echo "$username ALL=(ALL) ALL" >> /etc/sudoers
     echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
     useradd -m -g users -G wheel -s $shell $username
 }
@@ -45,7 +45,7 @@ function users {
 # Softwares
 function softwares {
     pacman --sync --needed --noconfirm - < $DOTFILES_PATH/system/archlinux/pkglist.txt
-    
+
     if ! command -v yay && [[ -z ${CI:+x} ]]
     then
         tmpdir=$(cd ~ && mktemp -d -p .)
@@ -62,4 +62,3 @@ keyboard
 network
 users
 softwares
-

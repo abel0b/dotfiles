@@ -1,10 +1,10 @@
-background_opacity: 0.99
+# background_opacity: 0.99
 
 # Colors (Terminal.app)
 colors:
   # Default colors
   primary:
-    background: '0x090909'
+    background: '0x151515'
     foreground: '0xb6b6b6'
 
   # Normal colors
