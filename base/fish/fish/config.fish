@@ -1,5 +1,7 @@
 set fish_greeting
 
+set -U fish_user_paths (ruby -e 'print Gem.user_dir')/bin $fish_user_paths
+
 # Base16 Shell
 if status --is-interactive
      set BASE16_SHELL "$HOME/.config/base16-shell/"

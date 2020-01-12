@@ -11,5 +11,11 @@ function fish_prompt --description 'Write out the prompt'
             end
             set suffix '#'
     end
-    echo -n -s (set_color green) (basename $PWD) (set_color normal) $suffix " "
+    
+
+    if not set -q __fish_prompt_hostname
+        set -g __fish_prompt_hostname (hostname|cut -d . -f 1)
+    end
+
+    echo -n -s $__fish_prompt_hostname : (set_color green) (basename $PWD) (set_color normal) $suffix " "
 end
