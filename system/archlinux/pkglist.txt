@@ -10,6 +10,7 @@ geogebra
 gimp
 git
 gnuplot
+htop
 inotify-tools
 networkmanager-openvpn
 opencv
@@ -17,6 +18,7 @@ openmp
 openmpi
 openssh
 openvpn
+perf
 plasma-desktop
 ripgrep
 rustup
