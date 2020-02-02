@@ -2,7 +2,7 @@
 
 DOTFILES_PATH=${DOTFILES_PATH:-$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1 && pwd)}
 CACHE_PATH=${CACHE_PATH:-$DOTFILES_PATH/cache}
-CONFIGS=$(ls -d $DOTFILES_PATH/base/*)
+CONFIGS=$(ls -d $DOTFILES_PATH/hosts/main/*)
 
 bold=$(tput bold)
 normal=$(tput sgr0)
@@ -163,9 +163,15 @@ function unsync() {
 function dotfiles_status() {
     if [[ ! -z "$1" ]]
     then
-        CONFIGS=$(ls -d $(realpath $1)/*)
+        config_dir="./hosts/$1"
+        if [[ ! -d "$config_dir" ]]
+        then
+            echo -e "\e[31m[error]\e[0m Directory does not exist $config_dir"
+            exit 1
+        fi
+        CONFIGS=$(ls -d $(realpath $config_dir)/*)
     else
-        CONFIGS=$(ls -d $DOTFILES_PATH/base/* $DOTFILES_PATH/system/*)
+        CONFIGS=$(ls -d $DOTFILES_PATH/hosts/main/* $DOTFILES_PATH/system/*)
     fi
 
     for dir in $CONFIGS
@@ -243,9 +249,15 @@ function dotfiles_sync() {
 
     if [[ ! -z "$1" ]]
     then
-        CONFIGS=$(ls -d $(realpath $1)/*)
+        config_dir="./hosts/$1"
+        if [[ ! -d "$config_dir" ]]
+        then
+            echo -e "\e[31m[error]\e[0m Directory does not exist $config_dir"
+            exit 1
+        fi
+        CONFIGS=$(ls -d $(realpath $config_dir)/*)
     fi
-
+    
     for dir in $CONFIGS
     do
         echo -e "\e[32m+\e[0m $(basename $dir)"
@@ -256,6 +268,17 @@ function dotfiles_sync() {
 }
 
 function dotfiles_unsync() {
+    if [[ ! -z "$1" ]]
+    then
+        config_dir="./hosts/$1"
+        if [[ ! -d "$config_dir" ]]
+        then
+            echo -e "\e[31m[error]\e[0m Directory does not exist $config_dir"
+            exit 1
+        fi
+        CONFIGS=$(ls -d $(realpath $config_dir)/*)
+    fi
+    
     for dir in $CONFIGS
     do
         echo -e "\e[31m-\e[0m $(basename $dir)"

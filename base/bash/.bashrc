@@ -59,5 +59,5 @@ if ! shopt -oq posix; then
 	fi
 fi
 
-export PS1='\h:$(basename $PWD)\[\e[1;31m\]>\[\e[0m\] '
+export PS1='\h:\[\e[1;31m\]$(basename $PWD)\[\e[0m\]> '
 export EDITOR=vim
