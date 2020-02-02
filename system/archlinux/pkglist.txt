@@ -10,8 +10,12 @@ geogebra
 gimp
 git
 gnuplot
+hexyl
 htop
 inotify-tools
+lsof
+ncdu
+netcat
 networkmanager-openvpn
 opencv
 openmp
@@ -23,6 +27,7 @@ plasma-desktop
 ripgrep
 rustup
 sshfs
+tcpdump
 texlive-most
 tmux
 ttf-croscore
