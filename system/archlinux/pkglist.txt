@@ -25,6 +25,7 @@ openvpn
 perf
 plasma-desktop
 ripgrep
+ruby
 rustup
 sshfs
 tcpdump
