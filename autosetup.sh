@@ -7,6 +7,7 @@ then
     pacman -S --needed --noconfirm git
     host="arch"
 elif [[ $(cat /etc/os-release) =~ "Ubuntu" ]]
+then
     apt-get install git
     host="ubuntu"
 else
