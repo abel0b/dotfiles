@@ -1,7 +1,0 @@
-plasma-org.kde.plasma.desktop-appletsrc ~/.config/plasma-org.kde.plasma.desktop-appletsrc
-kdeglobals ~/.config/kdeglobals
-kglobalshortcutsrc /home/abel/.config/kglobalshortcutsrc
-ktimezonedrc /home/abel/.config/ktimezonedrc
-kwinrc /home/abel/.config/kwinrc
-kwinrulesrc /home/abel/.config/kwinrulesrc
-kcminputrc /home/abel/.config/kcminputrc

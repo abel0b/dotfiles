@@ -1,7 +1,7 @@
 stages:
     - test
 
-test:
+test-arch:
     stage: test
     image: archlinux/base
     before_script:
@@ -9,5 +9,12 @@ test:
         - pacman -S --noconfirm binutils
         - touch /etc/sudoers
     script:
-        - curl https://raw.githubusercontent.com/abel0b/dotfiles/master/installer.sh | bash -
+        - curl https://raw.githubusercontent.com/abel0b/dotfiles/master/autosetup.sh | bash -
 
+test-ubuntu:
+    stage: test
+    image: ubuntu
+    before_script:
+        - apt-get update -y
+    script:
+        - curl https://raw.githubusercontent.com/abel0b/dotfiles/master/autosetup.sh | bash -

@@ -1,2 +1,0 @@
-keymap.cson ~/.atom/keymap.cson
-config.cson ~/.atom/config.cson

@@ -1,9 +1,9 @@
-# Dotfiles [![pipeline status](https://gitlab.com/abeliam/dotfiles/badges/master/pipeline.svg)](https://gitlab.com/abeliam/dotfiles/commits/master)
+# Dotfiles [![pipeline status](https://gitlab.com/abel0b/dotfiles/badges/master/pipeline.svg)](https://gitlab.com/abel0b/dotfiles/commits/master)
 Personal configuration files
 
 ## Usage
 ```bash
-./setup.sh [COMMAND]
+./dotman.sh sync [machine]
 ```
 
 ### Commands
@@ -15,5 +15,5 @@ Personal configuration files
 
 ## Configure new machine
 ```bash
-curl https://raw.githubusercontent.com/abel0b/dotfiles/master/installer.sh | bash -
+curl https://raw.githubusercontent.com/abel0b/dotfiles/master/autosetup.sh | bash -
 ```
