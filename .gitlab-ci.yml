@@ -2,7 +2,7 @@ stages:
     - test
 
 variables:
-    - HOME: "./tmp"
+    HOME: "./tmp"
 
 test-arch:
     stage: test
