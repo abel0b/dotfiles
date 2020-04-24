@@ -1,6 +1,9 @@
 stages:
     - test
 
+variables:
+    - HOME: "./tmp"
+
 test-arch:
     stage: test
     image: archlinux/base
@@ -17,4 +20,4 @@ test-ubuntu:
     before_script:
         - apt-get update -y
     script:
-        - curl https://raw.githubusercontent.com/abel0b/dotfiles/master/autosetup.sh | bash -
+        - wget -O- https://raw.githubusercontent.com/abel0b/dotfiles/master/autosetup.sh | bash -

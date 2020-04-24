@@ -15,6 +15,6 @@ else
     exit 1
 fi
 
-git clone https://github.com/abel0b/dotfiles.git ~/dotfiles
-cd ~/dotfiles
+git clone https://github.com/abel0b/dotfiles.git $HOME/dotfiles
+cd $HOME/dotfiles
 ./dotman.sh sync $host
