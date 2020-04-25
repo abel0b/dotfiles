@@ -23,4 +23,3 @@ test-ubuntu:
         - apt-get install -y curl
     script:
         - curl https://raw.githubusercontent.com/abel0b/dotfiles/master/autosetup.sh | bash -
-

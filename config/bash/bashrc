@@ -59,9 +59,19 @@ if ! shopt -oq posix; then
 	fi
 fi
 
-export PS1='\h:\[\e[1;31m\]$(basename $PWD)\[\e[0m\]> '
+source ~/git-prompt.sh
+export PS1='$(if [[ ! "$?" = "0" ]]; then echo "\[\e[1;31m\][$?]\[\e[0m\] "; fi)\h:\[\e[1;31m\]$(basename $PWD)\[\e[0m\] \[\e[1;33m\]$(__git_ps1 "[%s]")\[\e[0m\]> '
 export EDITOR=vim
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+bind '"\e[A": history-search-backward'
+bind '"\e[B": history-search-forward'
+
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+function bashedit() {
+	$EDITOR ~/.bashrc
+}
+
+function bashreload() {
+	source ~/.bashrc
+}

@@ -3,8 +3,8 @@
 DOTFILES_PATH=${DOTFILES_PATH:-$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1 && pwd)}
 CACHE_PATH=${CACHE_PATH:-$DOTFILES_PATH/cache}
 
-bold=$(tput bold)
-normal=$(tput sgr0)
+bold='\e[1m'
+reset='\e[0m'
 default_host="ubuntu"
 force=false
 verbosity=1
@@ -66,7 +66,7 @@ function dotman_status() {
     for config in $CONFIGS
     do
         group=$(basename $(dirname $config))
-        echo $bold$group/$(basename $config)$normal
+        echo -e "$bold$group/$(basename $config)$reset"
         source "$config/config.sh" # potentially unsafe
         if [[ -v copy[@] ]]
         then
@@ -91,7 +91,7 @@ function dotman_status() {
                         echo -e "    \e[0;33m$copyname (modified)\e[0m"
                     fi
                 else
-                    echo -e "    \e[0;31m$copyname\e[0m"
+                    echo -e "    \e[0;31m$copyname (deleted)\e[0m"
                 fi
             done
             unset copy
@@ -112,7 +112,7 @@ function dotman_sync() {
         fi
         CONFIGS=$(ls -d $(realpath $config_dir)/*)
     else
-        CONFIGS=$(ls -d $DOTFILES_PATH/hosts/$default_host/*)
+        CONFIGS=$(ls -d $DOTFILES_PATH/machines/$default_host/*)
     fi
 
     for config in $CONFIGS
@@ -161,7 +161,7 @@ function dotman_sync() {
                 done
                 unset copy
             fi
-            if ! fn_exists "sync"
+            if fn_exists "sync"
             then
                 (cd $(dirname $config) && sync)
                 unset sync
@@ -173,7 +173,7 @@ function dotman_sync() {
 function dotman_unsync() {
     if [[ ! -z "$1" ]]
     then
-        config_dir="./hosts/$1"
+        config_dir="./machines/$1"
         if [[ ! -d "$config_dir" ]]
         then
             echo -e "\e[31m[error]\e[0m Directory does not exist $config_dir"
@@ -185,7 +185,7 @@ function dotman_unsync() {
     for config in $CONFIGS
     do
         echo -e "\e[31m-\e[0m $(basename $config)"
-        if ! fn_exists "unsync"
+        if fn_exists "unsync"
         then
             (cd $(dirname $config) && unsync)
             unset unsync
@@ -212,20 +212,38 @@ function dotman_import() {
     fi
 
     target=$(basename $dotfile)
-    linkname=$(realpath $dotfile)
+    dotname=${dotfile/#$HOME/\~}
+    confdir=$DOTFILES_PATH/config/$topic
+    mkdir -p $confdir
+    cp -f $dotfile $confdir
 
-    mkdir -p $DOTFILES_PATH/config/$topic
-
-    mv $dotfile $DOTFILES_PATH/config/$topic
-
-    echo "$target $linkname" >> $DOTFILES_PATH/base/$topic/link.txt
+    create=0
+    if [[ -f "$confdir/config.sh" ]]
+    then
+        if grep -q "declare -a copy" $confdir/config.sh
+        then
+            if ! grep -q "\"$target\" \"$dotname\"" $confdir/config.sh
+            then
+                sed -i "s#declare -a copy(#declare -a copy=(\n    \"$target\" \"$dotname\"#g" $confdir/config.sh
+            fi
+            create=1
+        else
+            echo >> "$confdir/config.sh"
+        fi
+    fi
+    if [[ "$create" = "0" ]]
+    then
+        echo "declare -a copy=(" >> "$confdir/config.sh"
+        echo "    \"$target\" \"$dotname\"" >> "$confdir/config.sh"
+        echo ")" >> "$confdir/config.sh"
+    fi
 }
 
 commands="sync unsync help status import path"
 version=v$(git --git-dir $DOTFILES_PATH/.git rev-list --all --count).$(git --git-dir $DOTFILES_PATH/.git rev-parse --short HEAD)$([[ -z "$(git --git-dir $DOTFILES_PATH/.git status --porcelain --untracked-files=no)" ]] || echo "+")
 
 function dotman_help() {
-    echo "$bold@abel0b$normal dotfiles manager $version"
+    echo -e "$bold@abel0b$reset dotfiles manager $version"
     echo "github.com/abel0b"
     echo "Usage: $(basename $0) [command] [-V] [-f] [-v|-q]"
     echo
@@ -286,7 +304,7 @@ if [[ "$command" =~ ^(${commands//[[:space:]]/\|})$ ]]
 then
     dotman_$command $arguments
 else
-    echo "\e[31m[error]\e[0m Unknown command '$command'"
+    echo -e "\e[31m[error]\e[0m Unknown command '$command'"
     echo
     dotman_help
 fi

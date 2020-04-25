@@ -1,17 +1,21 @@
 # Dotfiles [![pipeline status](https://gitlab.com/abel0b/dotfiles/badges/master/pipeline.svg)](https://gitlab.com/abel0b/dotfiles/commits/master)
-Personal configuration files
+Various personal configuration files.
 
 ## Usage
 ```bash
 ./dotman.sh sync [machine]
+
+# Ubuntu
+./dotman.sh sync ubuntu
+
+# Archlinux
+./dotmatn.sh sync arch
 ```
 
 ### Commands
-- `sync`    Link and copy dotfiles
-- `unsync`  Remove dotfiles
-- `status`  Show dotfiles status
-- `system`  Configure new machine
-- `help`    Show help message
+- `sync`    Configure machine
+- `unsync`  Unconfigure machine
+- `status`  Display configuration status
 
 ## Configure new machine
 ```bash
