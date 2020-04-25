@@ -2,7 +2,8 @@ stages:
     - test
 
 variables:
-    HOME: "./tmp"
+    HOME: "/builds/abel0b"
+    GIT_STRATEGY: none
 
 test-arch:
     stage: test
@@ -19,5 +20,7 @@ test-ubuntu:
     image: ubuntu
     before_script:
         - apt-get update -y
+        - apt-get install -y curl
     script:
-        - wget -O- https://raw.githubusercontent.com/abel0b/dotfiles/master/autosetup.sh | bash -
+        - curl https://raw.githubusercontent.com/abel0b/dotfiles/master/autosetup.sh | bash -
+
