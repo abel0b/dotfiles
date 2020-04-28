@@ -7,6 +7,7 @@ bold='\e[1m'
 reset='\e[0m'
 default_host="ubuntu"
 force=false
+dry_run=false
 verbosity=1
 
 function expand_home {
@@ -256,10 +257,10 @@ function dotman_help() {
     echo
     echo "Options:"
     echo "  -f      Remove existing destination files"
+    echo "  -n      Dry run"
     echo "  -v      Enable verbose output"
     echo "  -q      Enable quiet output"
     echo "  -V      Show version number"
-
 }
 
 command=""
@@ -282,6 +283,9 @@ do
         -V)
             echo $version
             exit 0
+            ;;
+        -n)
+            dry_run=true
             ;;
         -*)
             echo -e "\e[31m[error]\e[0m Unknown option $token"

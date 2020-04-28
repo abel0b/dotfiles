@@ -59,9 +59,21 @@ if ! shopt -oq posix; then
 	fi
 fi
 
-source ~/git-prompt.sh
-export PS1='$(if [[ ! "$?" = "0" ]]; then echo "\[\e[1;31m\][$?]\[\e[0m\] "; fi)\h:\[\e[1;31m\]$(basename $PWD)\[\e[0m\] \[\e[1;33m\]$(__git_ps1 "[%s]")\[\e[0m\]> '
-export EDITOR=vim
+export PS1='$(if [[ ! "$?" = "0" ]]; then echo "\[\e[1;31m\]($?)\[\e[0m\] "; fi)\h:\[\e[1;31m\]$(basename $PWD)\[\e[0m\]\[\e[1;33m\]$(__git_ps1 " [%s]")\[\e[0m\]> '
+
+if [[ command -v nvim ]]
+then
+    export EDITOR=nvim
+elif [[ command -v vim ]]
+then
+    export EDITOR=vim
+fi
+
+# run x11 apps on windows subsystem linux
+if grep -q Microsoft /proc/sys/kernel/osrelease
+then
+    export DISPLAY=localhost:0
+fi
 
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
