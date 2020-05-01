@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-DOTFILES_PATH=${DOTFILES_PATH:-$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1 && pwd)}
-CACHE_PATH=${CACHE_PATH:-$DOTFILES_PATH/cache}
+DOTPATH=${DOTPATH:-$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1 && pwd)}
+CACHE_PATH=${CACHE_PATH:-$DOTPATH/cache}
 
-bold='\e[1m'
-reset='\e[0m'
+bold="\e[1m"
+reset="\e[0m"
 default_host="ubuntu"
 force=false
 dry_run=false
@@ -61,7 +61,7 @@ function dotman_status() {
         fi
         CONFIGS=$(ls -d $(realpath $config_dir)/*)
     else
-        CONFIGS=$(ls -d $DOTFILES_PATH/machines/$default_host/* $DOTFILES_PATH/system/*)
+        CONFIGS=$(ls -d $DOTPATH/machines/$default_host/*)
     fi
 
     for config in $CONFIGS
@@ -113,7 +113,7 @@ function dotman_sync() {
         fi
         CONFIGS=$(ls -d $(realpath $config_dir)/*)
     else
-        CONFIGS=$(ls -d $DOTFILES_PATH/machines/$default_host/*)
+        CONFIGS=$(ls -d $DOTPATH/machines/$default_host/*)
     fi
 
     for config in $CONFIGS
@@ -140,6 +140,11 @@ function dotman_sync() {
                         target=$config/$target
                     fi
 
+                    if [[ "$dry_run" = "true" ]]
+                    then
+                        continue
+                    fi
+
                     if [[ -e "$copyname" ]]
                     then
                         if diff $copyname $target > /dev/null
@@ -162,9 +167,14 @@ function dotman_sync() {
                 done
                 unset copy
             fi
+            if [[ "$dry_run" = "true" ]]
+            then
+                continue
+            fi
+
             if fn_exists "sync"
             then
-                (cd $(dirname $config) && sync)
+                (cd "$config" && sync)
                 unset sync
             fi
         fi
@@ -186,6 +196,11 @@ function dotman_unsync() {
     for config in $CONFIGS
     do
         echo -e "\e[31m-\e[0m $(basename $config)"
+        if [[ "$dry_run" = "true" ]]
+        then
+            continue
+        fi
+        
         if fn_exists "unsync"
         then
             (cd $(dirname $config) && unsync)
@@ -214,7 +229,7 @@ function dotman_import() {
 
     target=$(basename $dotfile)
     dotname=${dotfile/#$HOME/\~}
-    confdir=$DOTFILES_PATH/config/$topic
+    confdir=$DOTPATH/config/$topic
     mkdir -p $confdir
     cp -f $dotfile $confdir
 
@@ -241,7 +256,7 @@ function dotman_import() {
 }
 
 commands="sync unsync help status import path"
-version=v$(git --git-dir $DOTFILES_PATH/.git rev-list --all --count).$(git --git-dir $DOTFILES_PATH/.git rev-parse --short HEAD)$([[ -z "$(git --git-dir $DOTFILES_PATH/.git status --porcelain --untracked-files=no)" ]] || echo "+")
+version=v$(git --git-dir $DOTPATH/.git rev-list --all --count).$(git --git-dir $DOTPATH/.git rev-parse --short HEAD)$([[ -z "$(git --git-dir $DOTPATH/.git status --porcelain --untracked-files=no)" ]] || echo "+")
 
 function dotman_help() {
     echo -e "$bold@abel0b$reset dotfiles manager $version"
@@ -249,14 +264,14 @@ function dotman_help() {
     echo "Usage: $(basename $0) [command] [-V] [-f] [-v|-q]"
     echo
     echo "Commands:"
-    echo "  sync    Link and copy dotfiles"
-    echo "  unsync  Remove dotfiles"
+    echo "  sync    Install configuration"
+    echo "  unsync  Uninstall configuration"
     echo "  status  Show dotfiles status"
     echo "  help    Show help message"
     echo "  import  Import a dotfile"
     echo
     echo "Options:"
-    echo "  -f      Remove existing destination files"
+    echo "  -f      Overwrite existing destination files"
     echo "  -n      Dry run"
     echo "  -v      Enable verbose output"
     echo "  -q      Enable quiet output"
@@ -302,7 +317,7 @@ do
     esac
 done
 
-command=${command:-help}
+command=${command:-sync}
 
 if [[ "$command" =~ ^(${commands//[[:space:]]/\|})$ ]]
 then

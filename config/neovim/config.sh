@@ -3,3 +3,7 @@ declare -a copy=(
     "init.vim" "~/.config/nvim/init.vim"
     "coc-settings.json" "~/.config/nvim/coc-settings.json"
 )
+
+function sync {
+    nvim -E -s +'PlugInstall --sync' +qa
+}

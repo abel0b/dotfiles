@@ -10,6 +10,9 @@ Various personal configuration files.
 
 # Archlinux
 ./dotmatn.sh sync arch
+
+# Windows Subsystem Linux
+./dotman.sh sync wsl
 ```
 
 ### Commands

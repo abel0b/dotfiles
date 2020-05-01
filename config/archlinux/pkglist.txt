@@ -2,9 +2,9 @@ alacritty
 atom
 docker
 fd
-fish
 firefox
 firefox-developer-edition
+fish
 fzf
 gdm
 geogebra

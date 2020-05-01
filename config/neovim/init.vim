@@ -19,15 +19,27 @@ nnoremap <S-Down> :m+<CR>
 inoremap <S-Up> <Esc>:m-2<CR>
 inoremap <S-Down> <Esc>:m+<CR>
 
+" delete line without copying
+nnoremap <leader>d "_d
+xnoremap <leader>d "_d
+xnoremap <leader>p "_dP"
+
 if has('nvim')
     tnoremap <Esc> <C-\><C-n>
-    autocmd TermOpen term://* startinsert
 endif
 
-set background=dark
-let g:gruvbox_contrast_dark = 'hard'
+" save a file requiring root privileges
+if has('nvim')
+    " TODO: see https://github.com/neovim/neovim/issues/1496
+else
+    cmap w!! w !sudo tee % >/dev/null
+endif
 
-call plug#begin('~/.vim/plugged')
+if has('nvim')
+    call plug#begin('~/.config/nvim/plugged')
+else
+    call plug#begin('~/.vim/plugged')
+endif
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'honza/vim-snippets'
 Plug 'itchyny/lightline.vim'
