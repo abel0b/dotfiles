@@ -3,6 +3,7 @@ fish
 fzf
 git
 gnuplot
+hello
 htop
 inotify-tools
 lsof

@@ -52,9 +52,23 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'tpope/vim-surround'
 Plug 'mbbill/undotree'
 Plug 'yggdroot/indentline'
+Plug 'tpope/vim-fugitive'
 call plug#end()
 
+" configure colorscheme
 colorscheme jellybeans
+
+" configure lightline colorscheme
+let g:lightline = {
+      \ 'colorscheme': 'jellybeans',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead'
+      \ },
+      \ }
 
 let g:coc_global_extensions = ['coc-pairs', 'coc-clangd', 'coc-rls', 'coc-go', 'coc-python', 'coc-snippets']
 

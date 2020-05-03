@@ -8,6 +8,7 @@ reset="\e[0m"
 default_host="ubuntu"
 force=false
 dry_run=false
+debug=false
 verbosity=1
 
 function expand_home {
@@ -103,23 +104,33 @@ function dotman_status() {
 function dotman_sync() {
     mkdir --parent $CACHE_PATH
 
-    if [[ ! -z "$1" ]]
+    if [[ -z "$1" ]]
     then
-        config_dir="./machines/$1"
-        if [[ ! -d "$config_dir" ]]
-        then
-            echo -e "\e[31m[error]\e[0m Directory does not exist $config_dir"
-            exit 1
-        fi
-        CONFIGS=$(ls -d $(realpath $config_dir)/*)
-    else
         CONFIGS=$(ls -d $DOTPATH/machines/$default_host/*)
+    else
+        if [[ "$1" =~ / ]]
+        then
+            CONFIGS="$(realpath machines/$1)"
+        else
+            config_dir="./machines/$1"
+            if [[ ! -d "$config_dir" ]]
+            then
+                echo -e "\e[31m[error]\e[0m Directory does not exist $config_dir"
+                exit 1
+            fi
+            CONFIGS=$(ls -d $(realpath $config_dir)/*)
+        fi
+    fi 
+
+    if [[ "$debug" = true ]]
+    then
+        echo "CONFIGS=$CONFIGS"
     fi
 
     for config in $CONFIGS
     do
         echo -e "\e[32m+\e[0m $(basename $config)"
-        if [ -f $config/config.sh ]
+        if [[ -f $config/config.sh ]]
         then
             source "$config/config.sh" # potentially unsafe
             if [[ -v copy[@] ]]
@@ -143,6 +154,14 @@ function dotman_sync() {
                     if [[ "$dry_run" = "true" ]]
                     then
                         continue
+                    fi
+
+                    if [[ $target =~ gpg ]]
+                    then
+                        dectarget=$CACHE_PATH/$(basename $config)/$(basename $copyname)
+                        mkdir -p "$(dirname $dectarget)"
+                        gpg --decrypt "$target" > "$dectarget"
+                        target="$dectarget"
                     fi
 
                     if [[ -e "$copyname" ]]
@@ -182,15 +201,20 @@ function dotman_sync() {
 }
 
 function dotman_unsync() {
-    if [[ ! -z "$1" ]]
-    then
-        config_dir="./machines/$1"
-        if [[ ! -d "$config_dir" ]]
-        then
-            echo -e "\e[31m[error]\e[0m Directory does not exist $config_dir"
-            exit 1
+    if [[ -z "$1" ]]; then
+        CONFIGS=$(ls -d $DOTPATH/machines/$default_host/*)
+    else
+        if [[ "$1" =~ / ]]; then
+            CONFIGS="$1"
+        else
+            config_dir="./machines/$1"
+            if [[ ! -d "$config_dir" ]]
+            then
+                echo -e "\e[31m[error]\e[0m Directory does not exist $config_dir"
+                exit 1
+            fi
+            CONFIGS=$(ls -d $(realpath $config_dir)/*)
         fi
-        CONFIGS=$(ls -d $(realpath $config_dir)/*)
     fi
 
     for config in $CONFIGS
@@ -293,6 +317,7 @@ do
             verbosity=2
             ;;
         -d|--debug)
+            debug=true
             set -x
             ;;
         -V)
