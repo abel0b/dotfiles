@@ -4,5 +4,5 @@ declare -a copy=(
 )
 
 function sync {
-    nvim -E -s +'PlugInstall --sync' +qa
+    vim +'PlugInstall --sync' +qa
 }

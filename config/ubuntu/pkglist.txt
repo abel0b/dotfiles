@@ -1,3 +1,4 @@
+fd-find
 feh
 fish
 fzf
@@ -7,8 +8,12 @@ hello
 htop
 inotify-tools
 lsof
+most
 ncdu
+neovim
 netcat
+nodejs
+npm
 openvpn
 ripgrep
 ruby

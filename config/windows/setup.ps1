@@ -1,3 +1,7 @@
+# configure wsl
+wsl.exe --set-default-version 1
+# TODO: wsl.exe --set-version DISTRIBUTION 2
+
 # install scoop package manager
 $ScoopFound = Get-Command "scoop" -errorAction SilentlyContinue 
 if (-Not $ScoopFound) {
@@ -8,19 +12,29 @@ if (-Not $ScoopFound) {
 scoop bucket add extras
 
 # install packages
-# TODO: install if needed
-scoop install docker
-scoop install docker-compose
-scoop install dos2unix
-scoop install firefox
-scoop install fzf
-scoop install gsudo
-scoop install llvm
-scoop install netcat
-scoop install notepadplusplus
-scoop install obs-studio
-scoop install ripgrep
-scoop install ssh-copy-id
-scoop install vcxsrv
-scoop install vim
-scoop install vscode
+function CheckInstall($pkg, $cmdname) {
+    if (!$cmdname) {
+        $cmdname = $pkg
+    }
+    $CommandFound = Get-Command -Name $cmdname -ErrorAction SilentlyContinue
+    if (-Not $CommandFound) {
+        scoop install $pkg
+    }
+}
+
+CheckInstall "bat"
+CheckInstall "cmake"
+CheckInstall "dos2unix"
+CheckInstall "firefox"
+CheckInstall "fzf"
+CheckInstall "gsudo"
+CheckInstall "imagemagick" "magick"
+CheckInstall "llvm" "lld"
+CheckInstall "netcat" "nc"
+CheckInstall "ninja"
+CheckInstall "notepadplusplus" "notepad++"
+CheckInstall "ssh-copy-id"
+CheckInstall "tcc"
+CheckInstall "vcxsrv"
+CheckInstall "vim"
+CheckInstall "vscode" "code"
