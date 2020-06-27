@@ -4,7 +4,7 @@ wsl.exe --set-default-version 1
 
 # install scoop package manager
 $ScoopFound = Get-Command "scoop" -errorAction SilentlyContinue 
-if (-Not $ScoopFound) {
+If (-Not $ScoopFound) {
     Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
 }
 
@@ -29,6 +29,7 @@ CheckInstall "firefox"
 CheckInstall "fzf"
 CheckInstall "gsudo"
 CheckInstall "imagemagick" "magick"
+CheckInstall "lxrunoffline" "LxRunOffline.exe"
 CheckInstall "llvm" "lld"
 CheckInstall "netcat" "nc"
 CheckInstall "ninja"
