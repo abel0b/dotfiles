@@ -1,7 +1,12 @@
 function sync {
+    if [[ ! $EUID = 0 ]]; then
+        echo "Please run as root"
+        return
+    fi
+
     username=abel
     shell=/usr/bin/bash
-    hostname=abelpc
+    hostname=minitel
     local_domain=null
     region=Europe
     city=Paris
@@ -28,20 +33,20 @@ function sync {
     echo "127.0.1.1	$hostname.$local_domain" >> /etc/hosts
 
     # Users
-    echo "root ALL=(ALL) ALL" > /etc/sudoers
-    echo "$username ALL=(ALL) ALL" >> /etc/sudoers
-    echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
-    useradd -m -g users -G wheel -s $shell $username
+    #echo "root ALL=(ALL) ALL" > /etc/sudoers
+    #echo "$username ALL=(ALL) ALL" >> /etc/sudoers
+    #echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
+    #useradd -m -g users -G wheel -s $shell $username
 
     # Softwares
     pacman --sync --needed --noconfirm - < pkglist.txt
 
     if ! command -v yay && [[ -z ${CI:+x} ]]
     then
-        tmpdir=$(cd ~ && mktemp -d -p .)
+        tmpdir=$(cd ~ && mktemp -d)
         git clone https://aur.archlinux.org/yay.git $tmpdir
         cd $tmpdir
-        sudo makepkg -si --noconfirm
+        makepkg -si --noconfirm
         rm -rf $tmpdir
     fi
 }

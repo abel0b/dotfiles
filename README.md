@@ -1,5 +1,5 @@
 # Dotfiles [![pipeline status](https://gitlab.com/abel0b/dotfiles/badges/master/pipeline.svg)](https://gitlab.com/abel0b/dotfiles/commits/master)
-Various personal configuration files.
+Set of tools to bootstrap new machines.
 
 ## Usage
 ```bash
@@ -20,7 +20,7 @@ Various personal configuration files.
 - `unsync`  Unconfigure machine
 - `status`  Display configuration status
 
-## Configure new machine
+## Bootstrap a new machine
 ```bash
-curl https://raw.githubusercontent.com/abel0b/dotfiles/master/autosetup.sh | bash -
+curl https://raw.githubusercontent.com/abel0b/dotfiles/master/dotboot.sh | bash -
 ```

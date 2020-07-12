@@ -1,7 +1,9 @@
 alacritty
 atom
+bash-completion
 docker
 fd
+feh
 firefox
 firefox-developer-edition
 fish
@@ -14,7 +16,9 @@ gnuplot
 hexyl
 htop
 inotify-tools
+lsb-release
 lsof
+man
 ncdu
 netcat
 networkmanager-openvpn
@@ -36,4 +40,6 @@ ttf-croscore
 valgrind
 vim
 whois
+wireshark-cli
+wireshark-qt
 zip
