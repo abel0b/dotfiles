@@ -104,7 +104,10 @@ function dotman_status() {
 function dotman_sync() {
     mkdir --parent $CACHE_PATH
 
-    if [[ -z "$1" ]]
+    if [[ "$1" =~ .*/.* ]]
+    then
+        CONFIGS="$1"
+    elif [[ ! -z "$1" ]]
     then
         CONFIGS=$(ls -d $DOTPATH/machines/$default_host/*)
     else

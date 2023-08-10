@@ -7,7 +7,7 @@ function sync {
 
     sudo apt-get update -y
     sudo apt-get -y --ignore-missing install $(cat pkglist.txt)
-    if ! command -v pwsh > /dev/null; then
-        sudo apt-get -y install powershell
-    fi
+    #if ! command -v pwsh > /dev/null; then
+    #    sudo apt-get -y install powershell
+    #fi
 }

@@ -1,4 +1,6 @@
 bash-completion
+ccache
+clang-tools
 curl
 fd-find
 feh
@@ -14,7 +16,7 @@ lsof
 most
 ncdu
 neovim
-netcat
+netcat-openbsd
 nodejs
 npm
 openvpn

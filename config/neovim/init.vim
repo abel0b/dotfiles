@@ -40,6 +40,7 @@ if has('nvim')
 else
     call plug#begin('~/.vim/plugged')
 endif
+Plug 'github/copilot.vim'
 Plug 'honza/vim-snippets'
 Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdcommenter'
